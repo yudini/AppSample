@@ -2,6 +2,7 @@ package com.hansung.android.appsample;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -9,8 +10,13 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import java.util.Calendar;
 
 public class MonthViewFragment extends Fragment {
+
+    Calendar today;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -54,6 +60,16 @@ public class MonthViewFragment extends Fragment {
         ViewPager2 vpPager = rootView.findViewById(R.id.vpPager);
         FragmentStateAdapter adapter = new MonthAdapter(this);
         vpPager.setAdapter(adapter);
+        vpPager.setCurrentItem(3,false);  // SecondFragment를 첫 화면에 표시되도록 설정
+
+
+        vpPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                ActionBar actionBar =((MainActivity)getActivity()).getSupportActionBar();
+                actionBar.setTitle(today.get(Calendar.YEAR)+"년"+(today.get(Calendar.MONTH)+1)+"월");
+            }
+        });
 
         // Inflate the layout for this fragment
         return rootView;

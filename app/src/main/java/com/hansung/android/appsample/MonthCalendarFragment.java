@@ -75,7 +75,7 @@ public class MonthCalendarFragment extends Fragment {
         GridView gridview = (GridView)rootView.findViewById(R.id.gridview);
 
         getCalendar();
-       // init();
+        //init();
 
         //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
         ArrayAdapter<String> adapt
@@ -83,6 +83,8 @@ public class MonthCalendarFragment extends Fragment {
                 getActivity(),
                 android.R.layout.simple_list_item_1,
                 list);
+
+        //GridAdapter adapt = new GridAdapter(this,R.layout.fragment_month_calendar,list);
 
         // 어댑터를 GridView 객체에 연결
         gridview.setAdapter(adapt);
@@ -131,6 +133,7 @@ public class MonthCalendarFragment extends Fragment {
             list.add(Integer.toString(i));     //일 채우기
         }
     }
+
 
 
 

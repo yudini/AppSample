@@ -19,12 +19,13 @@ public class MonthAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        int index=getRealPosition(position);
+
+        //int index=getRealPosition(position);
         initCalendar();
 
-        System.out.println(position+"인덱스");
+        System.out.println(position);
         int year = today.get(Calendar.YEAR);   //수정
-        int month =today.get(Calendar.MONTH)+index;  //수정
+        int month =position;  //수정
 
         return MonthCalendarFragment.newInstance(year,month);
     }

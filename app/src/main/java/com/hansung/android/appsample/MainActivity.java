@@ -40,6 +40,10 @@ public class MainActivity extends AppCompatActivity implements MonthCalendarFrag
                 fragmentTransaction.commit();
                 return true;
             case R.id.week:
+                FragmentManager fragmentManager2 = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction2 = fragmentManager2.beginTransaction();
+                fragmentTransaction2.add(R.id.fragment_container, new WeekViewFragment());
+                fragmentTransaction2.commit();
                 //주 달력으로 프래그먼트 전환하는 코드 작성
                 Toast.makeText(getApplicationContext(), "주", Toast.LENGTH_SHORT).show();
                 return true;
@@ -59,9 +63,11 @@ public class MainActivity extends AppCompatActivity implements MonthCalendarFrag
     }
     public void onTitleSelected(int year,int month,int day) {
 
-        if(day>=1)        //날짜가 있을때만 토스트 메세지 띄우기
+        if(day>=1)
+            //날짜가 있을때만 토스트 메세지 띄우기
             //캘린더 클래스의 월은 0~11, +1을 해주어서 1~12로 설정
             Toast.makeText(getApplicationContext(),+year+"."+(month+1)+"."+day,Toast.LENGTH_SHORT).show();
+
     }
 
 }
