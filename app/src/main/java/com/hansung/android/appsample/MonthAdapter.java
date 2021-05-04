@@ -20,20 +20,13 @@ public class MonthAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
 
-        //int index=getRealPosition(position);
-        initCalendar();
-
-        System.out.println(position);
+        today=Calendar.getInstance();
         int year = today.get(Calendar.YEAR);   //수정
         int month =position;  //수정
 
         return MonthCalendarFragment.newInstance(year,month);
-    }
 
-    public void initCalendar(){
-        today=Calendar.getInstance();
     }
-
 
     // 전체 페이지 개수 반환
     @Override
@@ -41,7 +34,4 @@ public class MonthAdapter extends FragmentStateAdapter {
         return 1000;
     }
 
-    public int getRealPosition(int position){
-        return position%NUM_ITEMS;
-    }
 }

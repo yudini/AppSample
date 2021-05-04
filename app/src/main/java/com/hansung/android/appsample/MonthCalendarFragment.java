@@ -2,6 +2,7 @@ package com.hansung.android.appsample;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
@@ -32,7 +33,6 @@ public class MonthCalendarFragment extends Fragment {
     // 데이터 원본 준비
     Calendar today;
     ArrayList<String> list = new ArrayList<>();
-    Intent getIn;
 
     public MonthCalendarFragment() {
         // Required empty public constructor
@@ -48,19 +48,18 @@ public class MonthCalendarFragment extends Fragment {
         return fragment;
     }
 
+    // 인터페이스 추가 정의
+    public interface OnTitleSelectedListener {
+        public void onTitleSelected(int i, int j, int k, View view);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println("프래그먼트");
         if (getArguments() != null) {
             year= getArguments().getInt(ARG_PARAM1);
             month = getArguments().getInt(ARG_PARAM2);
         }
-    }
-
-    // 인터페이스 추가 정의
-    public interface OnTitleSelectedListener {
-        public void onTitleSelected(int i,int j,int k);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,29 +83,23 @@ public class MonthCalendarFragment extends Fragment {
                 android.R.layout.simple_list_item_1,
                 list);
 
-        //GridAdapter adapt = new GridAdapter(this,R.layout.fragment_month_calendar,list);
+        GridAdapter adapter = new GridAdapter(getActivity(), android.R.layout.simple_list_item_1,list);
 
         // 어댑터를 GridView 객체에 연결
         gridview.setAdapter(adapt);
-
-        ActionBar actionBar =((MainActivity)getActivity()).getSupportActionBar();
-        actionBar.setTitle(today.get(Calendar.YEAR)+"년"+(today.get(Calendar.MONTH)+1)+"월");
 
 
         //현재 날짜 토스트 메세지 띄우기
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //gridview.setBackgroundColor(Color.BLACK);
-                //view.setBackgroundColor(Color.CYAN);
                 int day=position-today.get(Calendar.DAY_OF_WEEK)+2;      //현재 일 구하기
                 // 현재 프래그먼트와 연결된 액티비티를 반환
-
 
                 Activity activity = getActivity();
                 // 선택된 항목 위치(position)을 OnTitleSelectedListener 인터페이스를 구현한 액티비티로 전달
                 if (activity instanceof OnTitleSelectedListener){
-                    ((OnTitleSelectedListener)activity).onTitleSelected(today.get(Calendar.YEAR),(today.get(Calendar.MONTH)),day);
+                    ((OnTitleSelectedListener)activity).onTitleSelected(today.get(Calendar.YEAR),(today.get(Calendar.MONTH)),day,view);
                 }
             }
         });
@@ -115,23 +108,22 @@ public class MonthCalendarFragment extends Fragment {
 
     }
 
+
     //달력 정보를 가져오는 함수,인텐트로 새로운 달력 정보를 가져올 경우
     private void getCalendar(){
 
         today.set(year,month,1);                             //현재 년도 및 월 설정.
-        ActionBar actionBar =((MainActivity)getActivity()).getSupportActionBar();
-        actionBar.setTitle(today.get(Calendar.YEAR)+"년"+(today.get(Calendar.MONTH)+1)+"월");
         int lastDate = today.getActualMaximum(Calendar.DATE);  //이번달의 마지막 날 얻어서 저장
         int startDate = today.get(Calendar.DAY_OF_WEEK);   //이번달의 시작요일 얻어서 저장
 
-        System.out.println("getCalendar 호출");
-        System.out.println("year:"+today.get(Calendar.YEAR)+"month:"+(today.get(Calendar.MONTH)+1)+lastDate);
         for(int i=0;i<startDate-1;i++){
             list.add("");                //공백으로 채우기
         }
         for(int i=1;i<=lastDate;i++){
             list.add(Integer.toString(i));     //일 채우기
         }
+
+
     }
 
 

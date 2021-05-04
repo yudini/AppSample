@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.time.Year;
 import java.util.Calendar;
 
 public class MonthViewFragment extends Fragment {
@@ -33,11 +34,11 @@ public class MonthViewFragment extends Fragment {
 
 
     // TODO: Rename and change types and number of parameters
-    public static MonthViewFragment newInstance(int year, int month) {
+    public static MonthViewFragment newInstance(int param1, int param2) {
         MonthViewFragment fragment = new MonthViewFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, year);
-        args.putInt(ARG_PARAM2, month);
+        args.putInt(ARG_PARAM1, param1);
+        args.putInt(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,19 +56,24 @@ public class MonthViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        today=Calendar.getInstance();
+        int month= today.get(Calendar.MONTH);
         View rootView = inflater.inflate(R.layout.fragment_month_view,container, false);
-
         ViewPager2 vpPager = rootView.findViewById(R.id.vpPager);
         FragmentStateAdapter adapter = new MonthAdapter(this);
+
         vpPager.setAdapter(adapter);
-        vpPager.setCurrentItem(3,false);  // SecondFragment를 첫 화면에 표시되도록 설정
+        vpPager.setCurrentItem(month,false);  // SecondFragment를 첫 화면에 표시되도록 설정
+        ActionBar actionBar =((MainActivity)getActivity()).getSupportActionBar();
 
 
-        vpPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        vpPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {  //페이지 변화가 일어날때
             @Override
             public void onPageSelected(int position) {
-                ActionBar actionBar =((MainActivity)getActivity()).getSupportActionBar();
-                actionBar.setTitle(today.get(Calendar.YEAR)+"년"+(today.get(Calendar.MONTH)+1)+"월");
+                super.onPageSelected(position);
+                int year=today.get(Calendar.YEAR)+position/12;  //페이지에 따른 달력의 연도 설정
+                int month=position%12;                //페이지에 따른 달력의 연도 설정
+                actionBar.setTitle(year+"년"+(month+1)+"월");   //액션바 타이틀 변경
             }
         });
 
